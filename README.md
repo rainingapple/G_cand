@@ -1,22 +1,32 @@
 # G_cand
 
-Source code repo for the gcand.so  metioned by our paper.
+Source code for **gcand.so** metioned in our paper.
 
-Our purpose is generating candidatesets for GNN model . Thus , We modified the huge code in LKH algorithm , only retain the CandidateSet part . We uses **Ctype** to transfer C function to Python to refrain from the expensive IO cost 
+**gcand** simplify the LKH algorithm to generate candidatesets for GNN model . 
 
-## Download
+We use **Ctype** as the bridge between C and Python , use Function parameter to refrain from the expensive IO cost 
 
-Just clone the repo from github
+## Changes
+
+- Using Function parameter to get TSP Data instead of Reading from files
+- Fixed EDGE_WEIGHT_TYPE to EUC_2D , COORDINATE_TYPE to NODE_COORD_SECTION
+- Only retain the CandidateSet part (CreateCandidateSet.c) in LKH , remove others
+- No main fuction , Only LKHmain for python to invoke
+
+## Usage
+
+### Download
 
 ```shell
 git clone https://github.com/rainingapple/G_cand.git
 ```
 
-## Build
+### Build
 
 Using gcc -shared to build a .so file
 
 ```shell
+cd G_cand
 gcc -I SRC/INCLUDE SRC/*.c -fPIC -shared -o gcand.so
 ```
 
@@ -26,5 +36,13 @@ Move gcand.so file to corresponding folder
 
 ```shell
 mv gcand.so "your folder path"
+```
+
+LoadLibrary and invoke LKHmain fuction as fellow
+
+```python
+cand_genrater = cdll.LoadLibrary('./gcand.so')
+cand_genrater.LKHmain.restype = c_char_p
+cand = cand_genrater.LKHmain(create_string_buffer(data_str.encode('utf-8'))).decode("utf-8").split("\n")
 ```
 

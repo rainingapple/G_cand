@@ -30,15 +30,15 @@ cd G_cand
 gcc -I SRC/INCLUDE SRC/*.c -fPIC -shared -o gcand.so
 ```
 
-### Usage
+### Load and Call
 
-Move gcand.so file to corresponding folder
+Move file to corresponding folder
 
 ```shell
 mv gcand.so "your folder path"
 ```
 
-LoadLibrary and invoke LKHmain fuction as fellow
+Load Library and call LKHmain fuction as fellow
 
 ```python
 cand_genrater = cdll.LoadLibrary('./gcand.so')
